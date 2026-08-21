@@ -67,22 +67,28 @@ def main():
 	if not access_points:
 		raise RuntimeError("接続候補がJSONにありません")
 
-	for index, access_point in enumerate(access_points, start=1):
-		print(f"{index}: {access_point['ssid']} ({access_point.get('security', '不明')})")
+	while True:
+		for index, access_point in enumerate(access_points, start=1):
+			print(f"{index}: {access_point['ssid']} ({access_point.get('security', '不明')})")
 
-	choice = int(input("接続する番号を入力してください: ")) - 1
-	if choice < 0 or choice >= len(access_points):
-		raise ValueError("番号が範囲外です")
+		try:
+			choice = int(input("接続する番号を入力してください: ")) - 1
+			if choice < 0 or choice >= len(access_points):
+				raise ValueError
+		except ValueError:
+			print("番号が正しくありません。もう一度入力してください。")
+			continue
 
-	selected = access_points[choice]
-	password = selected.get("password", "")
-	if selected.get("akm") and not password:
-		password = getpass.getpass("Wi-Fiパスワード: ")
+		selected = access_points[choice]
+		password = selected.get("password", "")
+		if selected.get("akm") and not password:
+			password = getpass.getpass("Wi-Fiパスワード: ")
 
-	if connect_to_access_point(selected, password):
-		print(f"{selected['ssid']} に接続しました")
-	else:
-		print(f"{selected['ssid']} に接続できませんでした")
+		if connect_to_access_point(selected, password):
+			print(f"{selected['ssid']} に接続しました")
+			return
+
+		print(f"{selected['ssid']} に接続できませんでした。別の番号を選択してください。")
 
 
 if __name__ == "__main__":

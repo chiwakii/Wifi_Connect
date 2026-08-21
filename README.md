@@ -6,7 +6,9 @@
 
 - `wifi_scanner.py`: `pywifi` で周辺のアクセスポイントをスキャンし、SSID、BSSID、信号強度、周波数、認証方式、暗号方式などを表示します。結果は `access_points.json` に保存され、既存のパスワード情報は保持されます。
 - `connect_from_json.py`: `access_points.json` の一覧からアクセスポイントを選択して接続します。パスワードがJSONにない場合は、実行時に非表示で入力します。
+- `connect_from_text.py`: `access_points.json` の一覧からSSIDを選択し、`wifi_password.tct` の内容をパスワードとして接続します。
 - `access_points.json`: スキャン結果と接続情報を保存するJSONファイルです。現在は空の配列で、スキャンすると内容が更新されます。
+- `wifi_password.tct`: `connect_from_text.py` が読み込むパスワードファイルです。1つのパスワードだけを記載します。
 
 ### その他
 
@@ -37,6 +39,12 @@ py wifi_scanner.py
 
 ```powershell
 py connect_from_json.py
+```
+
+テキストファイルからパスワードを読み込んで接続する場合は、`wifi_password.tct` にパスワードを記載してから実行します。
+
+```powershell
+py connect_from_text.py
 ```
 
 `access_points.json` の `password` に値を設定すると、そのパスワードが接続に使用されます。空欄の場合は、接続時にパスワードを入力します。パスワードをJSONに保存する場合は平文になるため、ファイルを共有・公開しないでください。
