@@ -33,7 +33,7 @@ WSL2では通常、Wi-Fiアダプターや `wpa_supplicant` を利用できま�
 まずアクセスポイントをスキャンしてJSONを作成します。
 
 ```powershell
-cd "C:\Users\admin\OneDrive\src\myPython"
+cd .\Wifi_Connect
 py wifi_scanner.py
 ```
 
@@ -54,7 +54,7 @@ py connect_from_text.py
 `connect_from_text.py` では、一覧から番号を選ぶと接続を試みます。接続に成功した場合は一覧を再表示し、`0`を入力すると開始前の接続先へ再接続して終了します。
 
 ```text
-PS C:\Users\admin\OneDrive\src\Wifi_Connect> py .\connect_from_text.py
+PS ...\Wifi_Connect> py .\connect_from_text.py
 1: JCOM_DDSC [Excellent, -30 dBm] (WPA2-PSK)
 2: aterm-e23a43-a [Usable, -62 dBm] (WPA2-PSK)
 3: auhome_aaL3GU [Usable, -62 dBm] (WPA2-PSK)
@@ -76,7 +76,7 @@ PS C:\Users\admin\OneDrive\src\Wifi_Connect> py .\connect_from_text.py
 接続する番号を入力してください: 0
 元の接続先「JCOM_DDSC」へ再接続しました。
 プログラムを終了します。
-PS C:\Users\admin\OneDrive\src\Wifi_Connect>
+PS ...\Wifi_Connect>
 ```
 
 `access_points.json` の `password` に値を設定すると、そのパスワードが接続に使用されます。空欄の場合は、接続時にパスワードを入力します。パスワードをJSONに保存する場合は平文になるため、ファイルを共有・公開しないでください。
