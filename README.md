@@ -1,5 +1,7 @@
 # myPython
 
+更新履歴と作業メモは [CHANGELOG.md](CHANGELOG.md) に記録しています。
+
 ## ファイル構成
 
 ### Wi-Fi関連
