@@ -49,6 +49,36 @@ py connect_from_json.py
 py connect_from_text.py
 ```
 
+### 実行例
+
+`connect_from_text.py` では、一覧から番号を選ぶと接続を試みます。接続に成功した場合は一覧を再表示し、`0`を入力すると開始前の接続先へ再接続して終了します。
+
+```text
+PS C:\Users\admin\OneDrive\src\Wifi_Connect> py .\connect_from_text.py
+1: JCOM_DDSC [Excellent, -30 dBm] (WPA2-PSK)
+2: aterm-e23a43-a [Usable, -62 dBm] (WPA2-PSK)
+3: auhome_aaL3GU [Usable, -62 dBm] (WPA2-PSK)
+4: auhome_aaL3GU-W [Usable, -62 dBm] (オープン（暗号化なし）)
+5: aterm-024cb2-g [Poor, -81 dBm] (WPA2-PSK)
+6: MC5446-0005 [Poor, -83 dBm] (WPA2-PSK)
+7: <SSID非公開> [Poor, -84 dBm] (WPA2-PSK)
+8: JCOM_UTYY [Poor, -84 dBm] (WPA2-PSK)
+9: MC5446-0013 [Poor, -85 dBm] (WPA2-PSK)
+10: MC5446-0023 [Poor, -85 dBm] (WPA2-PSK)
+11: aterm-bf4e1d-9 [Poor, -86 dBm] (WPA2-PSK)
+12: SGP200W-31A7-bg [Poor, -86 dBm] (WPA2-PSK)
+13: MC5446-0001 [Poor, -91 dBm] (WPA2-PSK)
+0: プログラムを終了
+接続する番号を入力してください: 4
+「auhome_aaL3GU-W」に接続を試みています…
+「auhome_aaL3GU-W」に接続できませんでした。
+別の番号を選択するか、0で終了してください。
+接続する番号を入力してください: 0
+元の接続先「JCOM_DDSC」へ再接続しました。
+プログラムを終了します。
+PS C:\Users\admin\OneDrive\src\Wifi_Connect>
+```
+
 `access_points.json` の `password` に値を設定すると、そのパスワードが接続に使用されます。空欄の場合は、接続時にパスワードを入力します。パスワードをJSONに保存する場合は平文になるため、ファイルを共有・公開しないでください。
 
 Wi-Fiのスキャン結果からパスワードを取得することはできません。
