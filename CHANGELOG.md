@@ -2,8 +2,37 @@
 
 ## 更新履歴
 
+### 2026-08-22
+
+- 接続先一覧に信号レベルと信号強度（dBm）を表示
+  - `connect_from_json.py` と `connect_from_text.py` に反映
+- `wifi_scanner.py` と `access_points.json` に信号レベル情報を追加
+  - `signal_level`: `Excellent`、`Good`、`Usable`、`Weak`、`Poor`
+  - `signal_description`: 信号強度に応じた利用目安
+- 接続処理の表示と終了操作を改善
+  - `connect_from_text.py` に番号0で終了する機能を追加
+  - 接続開始時に対象SSIDを表示
+  - 再接続コマンドの失敗を明示
+- `connect_from_text.py` の接続処理を修正
+  - 入力した番号のSSIDへ接続するよう変更
+  - 不要な進捗率計算とパスワード表示を削除
+  - 接続失敗時に再試行するよう変更
+- 接続失敗時の元のSSIDへの復旧処理を修正
+  - `akm` が空のプロファイルを `pywifi` へ再登録しないよう変更
+  - 空のプロファイルの場合はWindowsの既存プロファイルへ再接続
+- `connect_from_json.py` の `connect_to_access_point` を高速化
+  - 切断後の待機時間を1秒から0.2秒に短縮
+  - 接続状態を0.2秒間隔で確認
+  - 接続待ちの上限を5秒に設定
+  - `connect_from_text.py` も同じ接続処理を使用するため高速化
+- さらに接続確認間隔を0.1秒、接続待ちの上限を3秒に短縮
+- 接続待ちの上限を実用上の下限目安である2秒に短縮
+
 ### 2026-08-21
 
+- `connect_from_text.py` の再接続タイミングを変更
+  - 接続失敗直後には再接続しないよう変更
+  - `0` 入力による終了処理のときだけ、開始前のSSIDへ再接続
 - `wifi_scanner.py` を追加・更新
   - 周辺のアクセスポイントをスキャン
   - SSID、BSSID、信号強度、周波数、認証方式、暗号方式を表示・保存

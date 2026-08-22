@@ -1,10 +1,12 @@
 [
   {
-    "scan_time": "2026-08-21T13:27:46.700995+00:00",
+    "scan_time": "2026-08-22T11:09:37.097011+00:00",
     "ssid": "JCOM_DDSC",
-    "password": "",
+    "password": "610670983876",
     "bssid": "1a:01:12:bb:5b:a0:",
-    "signal": -34,
+    "signal": -37,
+    "signal_level": "Excellent",
+    "signal_description": "高速通信、4Kストリーミング、オンラインゲームに適しています。",
     "frequency_mhz": 5220000,
     "auth": [
       0
@@ -21,11 +23,13 @@
     "security": "WPA2-PSK"
   },
   {
-    "scan_time": "2026-08-21T13:27:46.700995+00:00",
+    "scan_time": "2026-08-22T11:09:37.097011+00:00",
     "ssid": "auhome_aaL3GU",
     "password": "",
     "bssid": "e0:9d:b8:a9:f6:47:",
-    "signal": -59,
+    "signal": -54,
+    "signal_level": "Good",
+    "signal_description": "家庭やオフィスのほとんどの用途で安定して利用できます。",
     "frequency_mhz": 2417000,
     "auth": [
       0
@@ -42,11 +46,13 @@
     "security": "WPA2-PSK"
   },
   {
-    "scan_time": "2026-08-21T13:27:46.700995+00:00",
+    "scan_time": "2026-08-22T11:09:37.097011+00:00",
     "ssid": "auhome_aaL3GU-W",
     "password": "",
     "bssid": "e0:9d:b8:a9:f6:48:",
-    "signal": -60,
+    "signal": -54,
+    "signal_level": "Good",
+    "signal_description": "家庭やオフィスのほとんどの用途で安定して利用できます。",
     "frequency_mhz": 2417000,
     "auth": [
       0
@@ -59,11 +65,13 @@
     "security": "オープン（暗号化なし）"
   },
   {
-    "scan_time": "2026-08-21T13:27:46.700995+00:00",
+    "scan_time": "2026-08-22T11:09:37.097011+00:00",
     "ssid": "aterm-e23a43-a",
     "password": "",
     "bssid": "80:22:a7:c5:ea:6d:",
-    "signal": -63,
+    "signal": -58,
+    "signal_level": "Good",
+    "signal_description": "家庭やオフィスのほとんどの用途で安定して利用できます。",
     "frequency_mhz": 2412000,
     "auth": [
       0
@@ -80,11 +88,13 @@
     "security": "WPA2-PSK"
   },
   {
-    "scan_time": "2026-08-21T13:27:46.700995+00:00",
+    "scan_time": "2026-08-22T11:09:37.097011+00:00",
     "ssid": "auhome_aaL3GU-A",
     "password": "",
     "bssid": "e0:9d:b8:a9:f6:43:",
-    "signal": -67,
+    "signal": -64,
+    "signal_level": "Usable",
+    "signal_description": "HDビデオ通話や通常のWeb閲覧に利用できます。",
     "frequency_mhz": 5200000,
     "auth": [
       0
@@ -101,74 +111,13 @@
     "security": "WPA2-PSK"
   },
   {
-    "scan_time": "2026-08-21T13:27:46.700995+00:00",
-    "ssid": "MC5446-0005",
-    "password": "",
-    "bssid": "00:17:2e:9d:0e:c5:",
-    "signal": -77,
-    "frequency_mhz": 2437000,
-    "auth": [
-      0
-    ],
-    "auth_description": "オープン認証（認証なし）",
-    "akm": [
-      4
-    ],
-    "akm_description": [
-      "WPA2-PSK"
-    ],
-    "cipher": 0,
-    "cipher_description": "暗号化なし",
-    "security": "WPA2-PSK"
-  },
-  {
-    "scan_time": "2026-08-21T13:27:46.700995+00:00",
-    "ssid": "aterm-bf4e1d-g",
-    "password": "",
-    "bssid": "08:10:86:a0:84:6a:",
-    "signal": -79,
-    "frequency_mhz": 2437000,
-    "auth": [
-      0
-    ],
-    "auth_description": "オープン認証（認証なし）",
-    "akm": [
-      4
-    ],
-    "akm_description": [
-      "WPA2-PSK"
-    ],
-    "cipher": 0,
-    "cipher_description": "暗号化なし",
-    "security": "WPA2-PSK"
-  },
-  {
-    "scan_time": "2026-08-21T13:27:46.700995+00:00",
+    "scan_time": "2026-08-22T11:09:37.097011+00:00",
     "ssid": "<SSID非公開>",
     "password": "",
     "bssid": "02:b2:d6:fd:bc:0c:",
-    "signal": -81,
-    "frequency_mhz": 2412000,
-    "auth": [
-      0
-    ],
-    "auth_description": "オープン認証（認証なし）",
-    "akm": [
-      4
-    ],
-    "akm_description": [
-      "WPA2-PSK"
-    ],
-    "cipher": 0,
-    "cipher_description": "暗号化なし",
-    "security": "WPA2-PSK"
-  },
-  {
-    "scan_time": "2026-08-21T13:27:46.700995+00:00",
-    "ssid": "JCOM_UTYY",
-    "password": "",
-    "bssid": "06:b2:d6:fd:bc:0c:",
     "signal": -82,
+    "signal_level": "Poor",
+    "signal_description": "接続が切れたり、不安定になったりする可能性が高い信号です。",
     "frequency_mhz": 2412000,
     "auth": [
       0
@@ -185,11 +134,13 @@
     "security": "WPA2-PSK"
   },
   {
-    "scan_time": "2026-08-21T13:27:46.700995+00:00",
+    "scan_time": "2026-08-22T11:09:37.097011+00:00",
     "ssid": "aterm-024cb2-g",
     "password": "",
     "bssid": "1c:7c:98:7d:73:c6:",
     "signal": -86,
+    "signal_level": "Poor",
+    "signal_description": "接続が切れたり、不安定になったりする可能性が高い信号です。",
     "frequency_mhz": 2412000,
     "auth": [
       0
@@ -206,14 +157,18 @@
     "security": "WPA2-PSK"
   },
   {
-    "scan_time": "2026-08-21T13:27:46.700995+00:00",
-    "ssid": "elecom-7ae824",
+    "scan_time": "2026-08-22T11:09:37.097011+00:00",
+    "ssid": "955345494251",
     "password": "",
-    "bssid": "38:97:a4:7a:e8:25:",
-    "signal": -88,
-    "frequency_mhz": 2412000,
-    "auth": [],
-    "auth_description": "不明な認証方式",
+    "bssid": "00:05:65:78:d9:6c:",
+    "signal": -92,
+    "signal_level": "Poor",
+    "signal_description": "接続が切れたり、不安定になったりする可能性が高い信号です。",
+    "frequency_mhz": 2467000,
+    "auth": [
+      0
+    ],
+    "auth_description": "オープン認証（認証なし）",
     "akm": [
       4
     ],
@@ -223,26 +178,5 @@
     "cipher": 0,
     "cipher_description": "暗号化なし",
     "security": "WPA2-PSK"
-  },
-  {
-    "scan_time": "2026-08-21T13:27:46.700995+00:00",
-    "ssid": "E_0282_9032",
-    "password": "",
-    "bssid": "66:82:14:81:57:bc:",
-    "signal": -90,
-    "frequency_mhz": 2437000,
-    "auth": [
-      0
-    ],
-    "auth_description": "オープン認証（認証なし）",
-    "akm": [
-      2
-    ],
-    "akm_description": [
-      "WPA-PSK"
-    ],
-    "cipher": 0,
-    "cipher_description": "暗号化なし",
-    "security": "WPA-PSK"
   }
 ]

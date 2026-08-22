@@ -33,6 +33,18 @@ CIPHER_DESCRIPTIONS = {
 JSON_FILE = Path(__file__).with_name("access_points.json")
 
 
+def get_signal_info(signal):
+	if signal >= -50:
+		return "Excellent", "高速通信、4Kストリーミング、オンラインゲームに適しています。"
+	if signal >= -60:
+		return "Good", "家庭やオフィスのほとんどの用途で安定して利用できます。"
+	if signal >= -67:
+		return "Usable", "HDビデオ通話や通常のWeb閲覧に利用できます。"
+	if signal >= -75:
+		return "Weak", "負荷の高いアプリではバッファリングや遅延が発生する可能性があります。"
+	return "Poor", "接続が切れたり、不安定になったりする可能性が高い信号です。"
+
+
 def describe_value(value, descriptions, unknown_text):
 	values = value if isinstance(value, list) else [value]
 	described_values = [
@@ -99,6 +111,7 @@ def scan_access_points():
 		cipher_description = describe_value(cipher, CIPHER_DESCRIPTIONS, "不明な暗号方式")
 		security = ", ".join(akm_description) or "オープン（暗号化なし）"
 		bssid = getattr(result, "bssid", None)
+		signal_level, signal_description = get_signal_info(result.signal)
 		password = saved_passwords.get(
 			("bssid", bssid), saved_passwords.get(("ssid", ssid), "")
 		)
@@ -110,6 +123,8 @@ def scan_access_points():
 				"password": password,
 				"bssid": bssid,
 				"signal": result.signal,
+				"signal_level": signal_level,
+				"signal_description": signal_description,
 				"frequency_mhz": getattr(result, "freq", None),
 				"auth": auth,
 				"auth_description": auth_description,
