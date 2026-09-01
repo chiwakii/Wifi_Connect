@@ -8,9 +8,9 @@
 
 - `wifi_scanner.py`: `pywifi` で周辺のアクセスポイントをスキャンし、SSID、BSSID、信号強度、信号レベル、周波数、認証方式、暗号方式などを表示します。結果は `access_points.json` に保存され、既存のパスワード情報は保持されます。
 - `connect_from_json.py`: `access_points.json` の一覧からアクセスポイントを選択して接続します。パスワードがJSONにない場合は、実行時に非表示で入力します。
-- `connect_from_text.py`: `access_points.json` の一覧からSSIDを選択し、`wifi_password.tct` の内容をパスワードとして接続します。
+- `connect_from_text.py`: `access_points.json` の一覧からSSIDを選択し、候補パスワードのテキストファイルを順に試します。`--wordlist`、`--limit`、`--ssid`、`--quiet`、`--log-failed` を使って、候補の範囲や進捗を調整できます。
 - `access_points.json`: スキャン結果と接続情報を保存するJSONファイルです。現在は空の配列で、スキャンすると内容が更新されます。
-- `wifi_password.tct`: `connect_from_text.py` が読み込むパスワードファイルです。1つのパスワードだけを記載します。
+- `wordlist_5.txt`: 5桁の候補パスワードをまとめたテキストファイルです。大きな候補群を直接読むのではなく、先頭から必要件数だけ試すために使います。
 
 ### その他
 
@@ -43,42 +43,42 @@ py wifi_scanner.py
 py connect_from_json.py
 ```
 
-テキストファイルからパスワードを読み込んで接続する場合は、`wifi_password.tct` にパスワードを記載してから実行します。
+候補ファイルからパスワードを読み込んで接続する場合は、まず対象の Wordlist を指定して実行します。
 
 ```powershell
-py connect_from_text.py
+py connect_from_text.py --wordlist ..\wordlist\wordlist_5.txt --limit 5
+```
+
+SSID を直接指定して一覧選択を省略することもできます。
+
+```powershell
+py connect_from_text.py --ssid "JCOM" --limit 10 --quiet
+```
+
+失敗した候補を保存したい場合は、`--log-failed` を使います。
+
+```powershell
+py connect_from_text.py --ssid "JCOM" --limit 10 --log-failed .\failed.txt
 ```
 
 ### 実行例
 
-`connect_from_text.py` では、一覧から番号を選ぶと接続を試みます。接続に成功した場合は一覧を再表示し、`0`を入力すると開始前の接続先へ再接続して終了します。
+`connect_from_text.py` では、候補ファイルの先頭から順にパスワードを試し、進捗バーと残り時間を表示します。接続が成功しても失敗しても、最後に元の接続先へ戻ります。
 
 ```text
-PS ...\Wifi_Connect> py .\connect_from_text.py
-1: JCOM_DDSC [Excellent, -30 dBm] (WPA2-PSK)
-2: aterm-e23a43-a [Usable, -62 dBm] (WPA2-PSK)
-3: auhome_aaL3GU [Usable, -62 dBm] (WPA2-PSK)
-4: auhome_aaL3GU-W [Usable, -62 dBm] (オープン（暗号化なし）)
-5: aterm-024cb2-g [Poor, -81 dBm] (WPA2-PSK)
-6: MC5446-0005 [Poor, -83 dBm] (WPA2-PSK)
-7: <SSID非公開> [Poor, -84 dBm] (WPA2-PSK)
-8: JCOM_UTYY [Poor, -84 dBm] (WPA2-PSK)
-9: MC5446-0013 [Poor, -85 dBm] (WPA2-PSK)
-10: MC5446-0023 [Poor, -85 dBm] (WPA2-PSK)
-11: aterm-bf4e1d-9 [Poor, -86 dBm] (WPA2-PSK)
-12: SGP200W-31A7-bg [Poor, -86 dBm] (WPA2-PSK)
-13: MC5446-0001 [Poor, -91 dBm] (WPA2-PSK)
-0: プログラムを終了
-接続する番号を入力してください: 4
-「auhome_aaL3GU-W」に接続を試みています…
-「auhome_aaL3GU-W」に接続できませんでした。
-別の番号を選択するか、0で終了してください。
-接続する番号を入力してください: 0
-元の接続先「JCOM_DDSC」へ再接続しました。
-プログラムを終了します。
-PS ...\Wifi_Connect>
+PS ...\Wifi_Connect> py .\connect_from_text.py --ssid "JCOM" --limit 5 --quiet
+候補ファイル: wordlist_5.txt
+試行件数: 5
+対象 SSID: *** に対して上から 5 件の候補を試します…
+[##########............] 1/5 ( 20.0%) 経過  0.2s | 残り  0.8s | aaaaa
+[##########............] 1/5 ( 20.0%) 経過  0.4s | 残り  0.6s | aaaaa -> 失敗
+[################....] 2/5 ( 40.0%) 経過  0.7s | 残り  0.5s | aaaab
+...
+元の接続先へ戻しました。
 ```
 
 `access_points.json` の `password` に値を設定すると、そのパスワードが接続に使用されます。空欄の場合は、接続時にパスワードを入力します。パスワードをJSONに保存する場合は平文になるため、ファイルを共有・公開しないでください。
+
+`--wordlist` で候補ファイルを切り替え、`--limit` で試す件数を制御できます。`--ssid` を使えば一覧から選ばずに対象 SSID を直接指定できます。`--quiet` は一覧表示を省略し、`--log-failed` は失敗候補をログファイルに保存します。
 
 Wi-Fiのスキャン結果からパスワードを取得することはできません。
