@@ -49,10 +49,33 @@ py connect_from_json.py
 py connect_from_text.py --wordlist ..\wordlist\wordlist_5.txt --limit 5
 ```
 
+候補ファイルの途中から、または範囲を指定して実行することもできます。
+
+```powershell
+py connect_from_text.py --wordlist ..\wordlist\wordlist_5.txt --start 1000 --end 2000
+py connect_from_text.py --wordlist ..\wordlist\wordlist_5.txt --start 1000 --limit 0
+```
+
+`--limit 0` は、その範囲内の全候補を実行します。ファイル全体をメモリに載せずに処理できるので、メモリ節約と全件網羅の両立が可能です。
+
 SSID を直接指定して一覧選択を省略することもできます。
 
 ```powershell
 py connect_from_text.py --ssid "JCOM" --limit 10 --quiet
+```
+
+速度と安定性を調整するには、`--preset` を使います。
+
+```powershell
+py connect_from_text.py --ssid "JCOM" --limit 10 --preset fast
+py connect_from_text.py --ssid "JCOM" --limit 10 --preset balanced
+py connect_from_text.py --ssid "JCOM" --limit 10 --preset safe
+```
+
+手動で詳細を指定する場合は、`--connect-timeout` と `--status-interval` を使います。
+
+```powershell
+py connect_from_text.py --ssid "JCOM" --limit 10 --preset fast --connect-timeout 0.3 --status-interval 0.01
 ```
 
 失敗した候補を保存したい場合は、`--log-failed` を使います。
@@ -76,6 +99,29 @@ PS ...\Wifi_Connect> py .\connect_from_text.py --ssid "JCOM" --limit 5 --quiet
 ...
 元の接続先へ戻しました。
 ```
+
+### 推奨設定
+
+- `fast`: 短時間で確認したいとき。候補数が少なく、雰囲気確認向け。
+  ```powershell
+  py .\connect_from_text.py --ssid "JCOM" --limit 10 --preset fast
+  ```
+- `balanced`: まずはこれを使うのが無難。速度と安定性のバランスが良い。
+  ```powershell
+  py .\connect_from_text.py --ssid "JCOM" --limit 10 --preset balanced
+  ```
+- `safe`: 安定重視。接続判定が厳しくなり、誤判定を減らしやすい。
+  ```powershell
+  py .\connect_from_text.py --ssid "JCOM" --limit 10 --preset safe
+  ```
+
+### 速さの目安
+
+- `fast`: 1候補あたり 0.3〜0.5 秒程度を狙う
+- `balanced`: 0.6〜1.0 秒程度を目安にする
+- `safe`: 1.0 秒超で安定することが多い
+
+実際の値は環境や Wi‑Fi アダプターの性能に依存するため、最初は `balanced` で開始し、必要なら `fast` または `safe` に調整するのが安全です。
 
 `access_points.json` の `password` に値を設定すると、そのパスワードが接続に使用されます。空欄の場合は、接続時にパスワードを入力します。パスワードをJSONに保存する場合は平文になるため、ファイルを共有・公開しないでください。
 

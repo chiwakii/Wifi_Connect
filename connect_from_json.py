@@ -13,9 +13,9 @@ from pywifi import const
 
 
 JSON_FILE = Path(__file__).with_name("access_points.json")
-DISCONNECT_WAIT_SECONDS = 0.2
-CONNECTION_TIMEOUT_SECONDS = 2.0
-STATUS_CHECK_INTERVAL_SECONDS = 0.1
+DISCONNECT_WAIT_SECONDS = 0.05
+CONNECTION_TIMEOUT_SECONDS = 0.7
+STATUS_CHECK_INTERVAL_SECONDS = 0.03
 
 
 def load_access_points():
@@ -54,7 +54,13 @@ def get_previous_connection(interface):
 	return previous_ssid, previous_profile
 
 
-def reconnect_to_previous_ssid(interface, previous_ssid, previous_profile):
+def reconnect_to_previous_ssid(
+	interface,
+	previous_ssid,
+	previous_profile,
+	connection_timeout_seconds=CONNECTION_TIMEOUT_SECONDS,
+	status_check_interval_seconds=STATUS_CHECK_INTERVAL_SECONDS,
+):
 	if not previous_ssid:
 		return False
 
@@ -70,25 +76,37 @@ def reconnect_to_previous_ssid(interface, previous_ssid, previous_profile):
 		print(f"元の接続先「{previous_ssid}」への再接続に失敗しました。{detail}")
 		return False
 
-	deadline = time.monotonic() + CONNECTION_TIMEOUT_SECONDS
+	deadline = time.monotonic() + connection_timeout_seconds
 	while time.monotonic() < deadline:
 		if interface.status() == const.IFACE_CONNECTED:
 			print(f"元の接続先「{previous_ssid}」へ再接続しました。")
 			return True
-		time.sleep(STATUS_CHECK_INTERVAL_SECONDS)
+		time.sleep(status_check_interval_seconds)
 
 	print(f"元の接続先「{previous_ssid}」への再接続を確認できませんでした。")
 	return False
 
 
-def connect_to_access_point(access_point, password="", restore_previous=True):
-	wifi = pywifi.PyWiFi()
-	interfaces = wifi.interfaces()
-	if not interfaces:
-		raise RuntimeError("無線LANインターフェースが見つかりません")
+def connect_to_access_point(
+	access_point,
+	password="",
+	restore_previous=True,
+	interface=None,
+	previous_connection=None,
+	connection_timeout_seconds=CONNECTION_TIMEOUT_SECONDS,
+	status_check_interval_seconds=STATUS_CHECK_INTERVAL_SECONDS,
+):
+	if interface is None:
+		wifi = pywifi.PyWiFi()
+		interfaces = wifi.interfaces()
+		if not interfaces:
+			raise RuntimeError("無線LANインターフェースが見つかりません")
+		interface = interfaces[0]
 
-	interface = interfaces[0]
-	previous_ssid, previous_profile = get_previous_connection(interface)
+	if previous_connection is None:
+		previous_ssid, previous_profile = get_previous_connection(interface)
+	else:
+		previous_ssid, previous_profile = previous_connection
 	interface.disconnect()
 	time.sleep(DISCONNECT_WAIT_SECONDS)
 
@@ -114,14 +132,20 @@ def connect_to_access_point(access_point, password="", restore_previous=True):
 
 	profile_id = interface.add_network_profile(profile)
 	interface.connect(profile_id)
-	deadline = time.monotonic() + CONNECTION_TIMEOUT_SECONDS
+	deadline = time.monotonic() + connection_timeout_seconds
 	while time.monotonic() < deadline:
 		if interface.status() == const.IFACE_CONNECTED:
 			return True
-		time.sleep(STATUS_CHECK_INTERVAL_SECONDS)
+		time.sleep(status_check_interval_seconds)
 
 	if restore_previous:
-		reconnect_to_previous_ssid(interface, previous_ssid, previous_profile)
+		reconnect_to_previous_ssid(
+			interface,
+			previous_ssid,
+			previous_profile,
+			connection_timeout_seconds=connection_timeout_seconds,
+			status_check_interval_seconds=status_check_interval_seconds,
+		)
 	return False
 
 
