@@ -2,9 +2,36 @@
 
 ## 更新履歴
 
+### 2026-09-02
+
+- 現在の進捗を記録
+  - Wi-Fi 接続処理を `wifi_connection.py` に分離
+  - 候補パスワードの試行処理を `wifi_probe.py` に分離
+  - 旧 `connect_from_json.py` と `connect_from_text.py` を削除
+  - README を新しいファイル構成と実行コマンドに更新
+  - `wifi_connection.py`、`wifi_probe.py`、`wifi_scanner.py` の構文確認を完了
+- 残作業
+  - Windows の PowerShell または cmd で実際の Wi-Fi 接続を確認する
+  - `fast`、`balanced`、`safe` の実測時間を比較する
+  - 元の接続先への復帰が成功・失敗・中断時に動作することを確認する
+
+### 2026-09-02
+
+- ファイル構成を責務ベースに整理
+  - `wifi_connection.py` を Wi‑Fi 接続と復帰の低レベル層として定義
+  - `wifi_probe.py` を候補列挙と試行ループの高レベル層として定義
+  - 旧 `connect_from_json.py` / `connect_from_text.py` は互換性のための旧エントリとして扱っていたが、正式な実行入口を新ファイルへ統一
+  - 旧エントリを削除し、参照先を新ファイルへ統一
+- README と実行手順を新しい命名へ更新
+  - 公式のコマンドは `py wifi_connection.py` と `py wifi_probe.py` を使用
+  - 旧ファイル名の説明を削除し、現在の責務分離に合わせて整理
+- フォルダ構成の整理により、コードの責務が見えやすくなった
+  - 接続制御と候補試行が明確に分離
+  - 互換ラッパーの維持を最小限にして、保守しやすい設計へ変更
+
 ### 2026-09-01
 
-- `connect_from_text.py` の候補パスワード試行を改善
+- `wifi_probe.py` の候補パスワード試行を改善
   - `--wordlist` で候補ファイルを切り替え可能に変更
   - `--limit` で1回に試す候補数を指定可能に変更
   - `--ssid` を追加し、SSID を直接指定して一覧選択を省略可能に変更
@@ -36,34 +63,34 @@
 
 ```powershell
 # 既定のワードリストを使って、上から5件だけ試す
-py .\connect_from_text.py
+py .\wifi_probe.py
 
 # 上から10件だけ試す
-py .\connect_from_text.py --limit 10
+py .\wifi_probe.py --limit 10
 
 # 1000件目から2000件目の範囲を試す
-py .\connect_from_text.py --start 1000 --end 2000
+py .\wifi_probe.py --start 1000 --end 2000
 
 # 範囲内の全候補を実行（メモリ節約）
-py .\connect_from_text.py --start 1000 --limit 0
+py .\wifi_probe.py --start 1000 --limit 0
 
 # 別の候補ファイルを指定する
-py .\connect_from_text.py --wordlist ..\wordlist\common.txt --limit 20
+py .\wifi_probe.py --wordlist ..\wordlist\common.txt --limit 20
 
 # SSID を直接指定して、一覧選択を省略する
-py .\connect_from_text.py --ssid "JCOM_DDSC" --limit 5
+py .\wifi_probe.py --ssid "JCOM_DDSC" --limit 5
 
 # SSID の部分一致で対象を絞る
-py .\connect_from_text.py --ssid "JCOM" --limit 10
+py .\wifi_probe.py --ssid "JCOM" --limit 10
 
 # 一覧表示を省略して、対象 SSID のみを試す
-py .\connect_from_text.py --ssid "JCOM" --limit 10 --quiet
+py .\wifi_probe.py --ssid "JCOM" --limit 10 --quiet
 
 # 速度優先の高速設定
-py .\connect_from_text.py --ssid "JCOM" --limit 10 --preset fast
+py .\wifi_probe.py --ssid "JCOM" --limit 10 --preset fast
 
 # 失敗した候補を保存する
-py .\connect_from_text.py --ssid "JCOM" --limit 10 --log-failed .\failed.txt
+py .\wifi_probe.py --ssid "JCOM" --limit 10 --log-failed .\failed.txt
 ```
 
 #### 確認事項
@@ -85,7 +112,7 @@ py .\connect_from_text.py --ssid "JCOM" --limit 10 --log-failed .\failed.txt
 ### 2026-08-22
 
 - 接続先一覧に信号レベルと信号強度（dBm）を表示
-  - `connect_from_json.py` と `connect_from_text.py` に反映
+  - `wifi_connection.py` と `wifi_probe.py` に反映
 - `wifi_scanner.py` と `access_points.json` に信号レベル情報を追加
   - `signal_level`: `Excellent`、`Good`、`Usable`、`Weak`、`Poor`
   - `signal_description`: 信号強度に応じた利用目安
@@ -93,18 +120,18 @@ py .\connect_from_text.py --ssid "JCOM" --limit 10 --log-failed .\failed.txt
   - `connect_from_text.py` に番号0で終了する機能を追加
   - 接続開始時に対象SSIDを表示
   - 再接続コマンドの失敗を明示
-- `connect_from_text.py` の接続処理を修正
+- `wifi_probe.py` の接続処理を修正
   - 入力した番号のSSIDへ接続するよう変更
   - 不要な進捗率計算とパスワード表示を削除
   - 接続失敗時に再試行するよう変更
 - 接続失敗時の元のSSIDへの復旧処理を修正
   - `akm` が空のプロファイルを `pywifi` へ再登録しないよう変更
   - 空のプロファイルの場合はWindowsの既存プロファイルへ再接続
-- `connect_from_json.py` の `connect_to_access_point` を高速化
+- `wifi_connection.py` の `connect_to_access_point` を高速化
   - 切断後の待機時間を1秒から0.2秒に短縮
   - 接続状態を0.2秒間隔で確認
   - 接続待ちの上限を5秒に設定
-  - `connect_from_text.py` も同じ接続処理を使用するため高速化
+  - `wifi_probe.py` も同じ接続処理を使用するため高速化
 - さらに接続確認間隔を0.1秒、接続待ちの上限を3秒に短縮
 - 接続待ちの上限を実用上の下限目安である2秒に短縮
 #### 課題
@@ -115,18 +142,18 @@ py .\connect_from_text.py --ssid "JCOM" --limit 10 --log-failed .\failed.txt
 
 ### 2026-08-21
 
-- `connect_from_text.py` の再接続タイミングを変更
+- `wifi_probe.py` の再接続タイミングを変更
   - 接続失敗直後には再接続しないよう変更
   - `0` 入力による終了処理のときだけ、開始前のSSIDへ再接続
 - `wifi_scanner.py` を追加・更新
   - 周辺のアクセスポイントをスキャン
   - SSID、BSSID、信号強度、周波数、認証方式、暗号方式を表示・保存
   - 既存のパスワード情報を保持
-- `connect_from_json.py` を追加
+- `wifi_connection.py` を追加
   - `access_points.json` からSSIDを選択して接続
   - 接続失敗時は番号入力へ戻る
-- `connect_from_text.py` を追加
-  - `wifi_password.tct` からパスワードを読み込んで接続
+- `wifi_probe.py` を追加
+  - `wifi_password.txt` からパスワードを読み込んで接続
   - 接続失敗時は番号入力へ戻る
 - `README.md` を更新
   - 各ファイルの機能、入出力、使用ライブラリ、実行方法を記載
