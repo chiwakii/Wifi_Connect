@@ -40,10 +40,10 @@ py .\wifi_connection.py
 py .\wifi_probe.py --wordlist ..\wordlist\wordlist_5.txt --limit 5
 ```
 
-SSID を直接指定して一覧選択を省略できます。
+SSID を直接指定して一覧選択を省略できます。以下の `<TARGET_SSID>` は実際の SSID に置き換えてください。
 
 ```powershell
-py .\wifi_probe.py --ssid "JCOM" --limit 10 --quiet
+py .\wifi_probe.py --ssid "<TARGET_SSID>" --limit 10 --quiet
 ```
 
 ## 主要オプション
@@ -61,8 +61,8 @@ py .\wifi_probe.py --ssid "JCOM" --limit 10 --quiet
 
 ```powershell
 py .\wifi_probe.py --wordlist ..\wordlist\wordlist_5.txt --start 1000 --end 2000
-py .\wifi_probe.py --ssid "JCOM" --limit 10 --preset fast
-py .\wifi_probe.py --ssid "JCOM" --limit 10 --log-failed .\failed.txt
+py .\wifi_probe.py --ssid "<TARGET_SSID>" --limit 10 --preset fast
+py .\wifi_probe.py --ssid "<TARGET_SSID>" --limit 10 --log-failed .\failed.txt
 ```
 
 ## 挙動

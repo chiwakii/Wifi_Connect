@@ -117,15 +117,6 @@ def count_passwords(wordlist_path, start=0, end=None, limit=None):
     return total
 
 
-def redact(value):
-    if value is None:
-        return "<hidden>"
-    text = str(value)
-    if not text:
-        return "<hidden>"
-    return "***"
-
-
 def resolve_timing(preset, connect_timeout=None, status_interval=None):
     presets = {
         "fast": {"connect_timeout": 0.4, "status_interval": 0.02},
@@ -217,7 +208,7 @@ def main():
             for index, access_point in enumerate(access_point_list, start=1):
                 signal = access_point.get("signal", "不明")
                 signal_level = access_point.get("signal_level", "不明")
-                ssid = redact(access_point.get('ssid'))
+                ssid = access_point.get("ssid", "<unknown>")
                 print(
                     f"{index}: {ssid} "
                     f"[{signal_level}, {signal} dBm] "
@@ -257,7 +248,7 @@ def main():
             args.connect_timeout,
             args.status_interval,
         )
-        print(f"\r対象 SSID: {redact(selected.get('ssid'))} | preset={args.preset} | timeout={connect_timeout:.2f}s | interval={status_interval:.2f}s")
+        print(f"\r対象 SSID: {selected.get('ssid', '<unknown>')} | preset={args.preset} | timeout={connect_timeout:.2f}s | interval={status_interval:.2f}s")
         matched = False
         started_at = time.perf_counter()
         attempted = []
@@ -288,7 +279,7 @@ def main():
                 attempt_durations.append(time.perf_counter() - started_at - elapsed)
 
                 if success:
-                    print(f"\r対象 SSID {redact(selected.get('ssid'))} に接続しました: {password}")
+                    print(f"\r対象 SSID {selected.get('ssid', '<unknown>')} に接続しました: {password}")
                     matched = True
                     break
 
@@ -312,13 +303,13 @@ def main():
                 print("\r元の接続先への復帰を試みました。", flush=True)
 
         if matched:
-            print(f"\r対象 SSID {redact(selected.get('ssid'))} への接続試験を完了しました。")
+            print(f"\r対象 SSID {selected.get('ssid', '<unknown>')} への接続試験を完了しました。")
             return
 
         elapsed = time.perf_counter() - started_at
         print()
         print(
-            f"対象 SSID {redact(selected.get('ssid'))} で上から {total} 件の確認を終了しました。"
+            f"対象 SSID {selected.get('ssid', '<unknown>')} で上から {total} 件の確認を終了しました。"
             f" (合計 {elapsed:.1f}s)"
         )
         if attempt_durations:

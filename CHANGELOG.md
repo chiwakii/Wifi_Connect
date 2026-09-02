@@ -15,8 +15,6 @@
   - `fast`、`balanced`、`safe` の実測時間を比較する
   - 元の接続先への復帰が成功・失敗・中断時に動作することを確認する
 
-### 2026-09-02
-
 - ファイル構成を責務ベースに整理
   - `wifi_connection.py` を Wi‑Fi 接続と復帰の低レベル層として定義
   - `wifi_probe.py` を候補列挙と試行ループの高レベル層として定義
@@ -29,13 +27,23 @@
   - 接続制御と候補試行が明確に分離
   - 互換ラッパーの維持を最小限にして、保守しやすい設計へ変更
 
+#### 考察
+- 調べたところによると、パスワードリストに工夫の余地がある。
+- APIはpywifiでは、ctypeモジュールのwindll.wlanapiをラップしているみたいだ。
+- 処理側での改良余地はウェイトをどこまで削ってよいか、になるか。最適化。
+ - オプションに入れているが、
+  --connect-timeout: 接続待ちの秒数
+  --status-interval: 接続確認の待機
+  この２つである。計算的限界と、通信遅延的限界を考慮する必要があるが、どう調べればよいか。
+- Aircrack-ng他のツールからハックしたいところだが…
+
 ### 2026-09-01
 
 - `wifi_probe.py` の候補パスワード試行を改善
   - `--wordlist` で候補ファイルを切り替え可能に変更
   - `--limit` で1回に試す候補数を指定可能に変更
   - `--ssid` を追加し、SSID を直接指定して一覧選択を省略可能に変更
-  - 部分一致検索に対応し、`--ssid JCOM` のように一部の名前だけでも対象を絞れるよう変更
+  - 部分一致検索に対応し、`--ssid <TARGET_SSID>` のように対象を絞れるよう変更
   - `--quiet` を追加し、候補一覧の表示を省略して対象 SSID のみを試せるよう変更
   - `--log-failed` を追加し、失敗した候補をログファイルへ保存できるよう変更
   - `--start` と `--end` を追加し、候補ファイルの範囲を指定して逐次実行できるよう変更
@@ -57,7 +65,7 @@
   - 巨大なワードリスト全件読み込みを避け、先頭数件での確認フローを確立
   - メモリ不足を避けるため、候補ファイルは必要分だけ読み込むよう変更
   - 範囲指定で全候補を回せるようにして、メモリ節約と全件網羅の両立を実現
-  - 画面表示やログに含まれる SSID 等の個人情報をマスキングし、共有時の露出を抑制
+  - 公開ドキュメント内の SSID 例をプレースホルダーへ置き換え、個人情報の露出を抑制
 
 #### オプションの使い方
 
@@ -78,19 +86,19 @@ py .\wifi_probe.py --start 1000 --limit 0
 py .\wifi_probe.py --wordlist ..\wordlist\common.txt --limit 20
 
 # SSID を直接指定して、一覧選択を省略する
-py .\wifi_probe.py --ssid "JCOM_DDSC" --limit 5
+py .\wifi_probe.py --ssid "<TARGET_SSID>" --limit 5
 
 # SSID の部分一致で対象を絞る
-py .\wifi_probe.py --ssid "JCOM" --limit 10
+py .\wifi_probe.py --ssid "<TARGET_SSID>" --limit 10
 
 # 一覧表示を省略して、対象 SSID のみを試す
-py .\wifi_probe.py --ssid "JCOM" --limit 10 --quiet
+py .\wifi_probe.py --ssid "<TARGET_SSID>" --limit 10 --quiet
 
 # 速度優先の高速設定
-py .\wifi_probe.py --ssid "JCOM" --limit 10 --preset fast
+py .\wifi_probe.py --ssid "<TARGET_SSID>" --limit 10 --preset fast
 
 # 失敗した候補を保存する
-py .\wifi_probe.py --ssid "JCOM" --limit 10 --log-failed .\failed.txt
+py .\wifi_probe.py --ssid "<TARGET_SSID>" --limit 10 --log-failed .\failed.txt
 ```
 
 #### 確認事項
@@ -99,7 +107,7 @@ py .\wifi_probe.py --ssid "JCOM" --limit 10 --log-failed .\failed.txt
 - WSL2 では `/var/run/wpa_supplicant` が存在せず、Wi-Fi制御 API が使えない。
 - 接続テスト時は必ず元の接続先へ戻るようにして、接続切断の影響を最小化する。
 - 大きなワードリスト全件を読むと時間とメモリが大きくなるため、最初は `--limit` を小さくして確認する。
-### 考察
+#### 考察
 
 - パスワードファイルを５桁で作成した。
 - パスワードファイルから読み込み接続を繰り返し試行する。
